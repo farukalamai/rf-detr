@@ -13,6 +13,7 @@ from PIL import Image
 from rfdetr.config import RFDETRBaseConfig, RFDETRLargeConfig, TrainConfig, ModelConfig
 from rfdetr.main import Model, download_pretrain_weights
 from rfdetr.util.metrics import MetricsPlotSink, MetricsTensorBoardSink
+from rfdetr.util.coco_classes import COCO_CLASSES
 
 logger = getLogger(__name__)
 class RFDETR:
@@ -24,6 +25,12 @@ class RFDETR:
         self.maybe_download_pretrain_weights()
         self.model = self.get_model(self.model_config)
         self.callbacks = defaultdict(list)
+        self.names = COCO_CLASSES
+
+    @property
+    def class_names(self):
+        """Return a dictionary mapping class IDs to class names."""
+        return self.names
 
     def maybe_download_pretrain_weights(self):
         download_pretrain_weights(self.model_config.pretrain_weights)
